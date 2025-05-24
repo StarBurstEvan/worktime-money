@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>時分秒薪資計算器</title>
+</head>
+<body>
+  <h1>時分秒薪資計算器</h1>
+  <label>月薪（元）<input type="number" id="salary" /></label><br/>
+  <label>每月工時（小時）<input type="number" id="hours" /></label><br/>
+  <button onclick="calculate()">計算</button>
+
+  <div id="result"></div>
+
+  <script>
+    function calculate() {
+      const salary = parseFloat(document.getElementById('salary').value);
+      const hours = parseFloat(document.getElementById('hours').value);
+      if (isNaN(salary) || isNaN(hours) || hours <= 0) {
+        alert("請輸入有效數字！");
+        return;
+      }
+
+      const hourly = salary / hours;
+      const minute = hourly / 60;
+      const second = minute / 60;
+
+      const resultHTML = `
+        <p>每小時：${hourly.toFixed(2)} 元</p>
+        <p>每分鐘：${minute.toFixed(4)} 元</p>
+        <p>每秒鐘：${second.toFixed(6)} 元</p>
+        <p>（哭啊，加班一小時可能只值兩杯手搖…）</p>
+      `;
+      document.getElementById('result').innerHTML = resultHTML;
+    }
+  </script>
+</body>
+</html>
