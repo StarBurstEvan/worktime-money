@@ -3,6 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <title>時分秒薪資計算器</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      text-align: center;
+      padding: 40px;
+    }
+    input {
+      margin: 10px;
+      padding: 8px;
+    }
+    button {
+      padding: 8px 16px;
+    }
+    #liveMoney {
+      font-size: 24px;
+      color: green;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
   <h1>時分秒薪資計算器</h1>
@@ -11,11 +31,17 @@
   <button onclick="calculate()">計算</button>
 
   <div id="result"></div>
+  <div id="liveMoney" style="display:none;">你目前賺到：$ 0.000000</div>
 
   <script>
+    let timer;
+    let currentEarned = 0;
+    let perSecond = 0;
+
     function calculate() {
       const salary = parseFloat(document.getElementById('salary').value);
       const hours = parseFloat(document.getElementById('hours').value);
+
       if (isNaN(salary) || isNaN(hours) || hours <= 0) {
         alert("請輸入有效數字！");
         return;
@@ -23,15 +49,26 @@
 
       const hourly = salary / hours;
       const minute = hourly / 60;
-      const second = minute / 60;
+      perSecond = minute / 60;
 
       const resultHTML = `
         <p>每小時：${hourly.toFixed(2)} 元</p>
         <p>每分鐘：${minute.toFixed(4)} 元</p>
-        <p>每秒鐘：${second.toFixed(6)} 元</p>
+        <p>每秒鐘：${perSecond.toFixed(6)} 元</p>
         <p>（哭啊，加班一小時可能只值兩杯手搖…）</p>
       `;
       document.getElementById('result').innerHTML = resultHTML;
+
+      // 清除舊的計時器
+      clearInterval(timer);
+      currentEarned = 0;
+      document.getElementById("liveMoney").style.display = "block";
+      document.getElementById("liveMoney").innerText = `你目前賺到：$ 0.000000`;
+
+      timer = setInterval(() => {
+        currentEarned += perSecond;
+        document.getElementById("liveMoney").innerText = `你目前賺到：$ ${currentEarned.toFixed(6)}`;
+      }, 1000);
     }
   </script>
 </body>
